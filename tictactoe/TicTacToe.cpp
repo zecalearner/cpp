@@ -15,98 +15,43 @@ TicTacToe::TicTacToe()
 bool TicTacToe::FindWinner()
 {
 	bool winner_found = false;
-	for (size_t k = 0; k < 3; k++)
+
+	for (size_t i = 0; i < board.size() && !winner_found; i++)
 	{
-		for (size_t i = 0; i < board.size() && !winner_found; i++)
+		if (board.at(i) == 'x' || board.at(i) == 'o')
 		{
-			if (board.at(i) == 'x' || board.at(i) == 'o')
+			char player_char = board.at(i);
+			unsigned int grid_size = TicTacToe::GetGridSize();
+			 // check for same row wins assuming you are at the middle point
+			if (i % grid_size != 0 && i % grid_size + 1 != 0) // this covers first and last column
 			{
-				char player_char = board.at(i);
-				unsigned int grid_size = TicTacToe::GetGridSize();
-				switch (k)
+				if (player_char == board.at(i - 1) && player_char == board.at(i + 1))
 				{
-				case 0: // check for same row wins assuming you are at the middle point
-					if (i % grid_size != 0 && i % grid_size + 1 != 0) // this covers first and last column
-					{
-						if (player_char == board.at(i - 1) && player_char == board.at(i + 1))
-						{
-							TicTacToe::WinnerFound(player_char);
-							winner_found = true;
-						}
-					}
-					break;
-				case 1: //check for same column wins assuming you are at the middle point
-					if (i > grid_size && i < (grid_size - 1) * (grid_size + 1)) // exclude first and last row
-					{
-						if (player_char == board.at(i - grid_size - 1) && player_char == board.at(i + grid_size + 1))
-						{
-							TicTacToe::WinnerFound(player_char);
-							winner_found = true;
-						}
-					}
-					break;
-				case 2: // check for diagonal wins
-					if (i % grid_size != 0 && i % grid_size + 1 != 0 && i > grid_size && i < (grid_size - 1) * (grid_size + 1)) // exclude first and last column, and first and last row
-					{
-						if (player_char == board.at(DIAGONAL_LB + i) && player_char == board.at(i + (int)DIAGONAL_RA)
-							|| player_char == board.at(DIAGONAL_LA + i) && player_char == board.at(DIAGONAL_RB + i)
-							)
-						{
-							TicTacToe::WinnerFound(player_char);
-							winner_found = true;
-						}
-					}
-					break;
-				default:
-					
-					break;
+					TicTacToe::WinnerFound(player_char);
+					winner_found = true;
 				}
 			}
-
-
-
-#if 0
-			// special cases
-			if (i == 0) // first entry
+			//check for same column wins assuming you are at the middle point
+			if (i > grid_size && i < (grid_size - 1) * (grid_size + 1)) // exclude first and last row
 			{
-				if (player_char == board.at(DIAGONAL_LB) && player_char == board.at(DIAGONAL_LB * 2)
-					|| player_char == board.at(1) && player_char == board.at(2)
-					|| player_char == board.at(grid_size + 1) && player_char == board.at((grid_size + 1) * 2)
+				if (player_char == board.at(i - grid_size - 1) && player_char == board.at(i + grid_size + 1))
+				{
+					TicTacToe::WinnerFound(player_char);
+					winner_found = true;
+				}
+			}
+				// check for diagonal wins
+			if (i % grid_size != 0 && i % grid_size + 1 != 0 && i > grid_size && i < (grid_size - 1) * (grid_size + 1)) // exclude first and last column, and first and last row
+			{
+				if (player_char == board.at(DIAGONAL_LB + i) && player_char == board.at(i + (int)DIAGONAL_RA)
+					|| player_char == board.at(DIAGONAL_LA + i) && player_char == board.at(DIAGONAL_RB + i)
 					)
 				{
-					std::cout << "WINNER WINNER CHICKEN DINNER! Congratulations player " + player_char;
-					TicTacToe::ResetMove();
-					TicTacToe::ResetGrid();
+					TicTacToe::WinnerFound(player_char);
+					winner_found = true;
 				}
 			}
-			else if (i < grid_size - 1) // first row except last column
-			{
-				if (player_char == board.at(DIAGONAL_LB) && player_char == board.at(DIAGONAL_LB * 2)
-					|| player_char == board.at(1) && player_char == board.at(2)
-					|| player_char == board.at(grid_size + 1) && player_char == board.at((grid_size + 1) * 2)
-					)
-				{
-
-				}
-			}
-			else if (i + 1 < (grid_size - 1) * (grid_size + 1)) // last row
-			{
-
-			}
-			else if () // right most column
-			{
-
-			}
-			else if (i % grid_size + 1 != 0) // left most column
-			{
-
-			}
-			else
-			{
-				// we are free to search for above, below, left, right and diagonally for the 3 in a row
-			}
-#endif
-
+				
 		}
 	}
 	return winner_found;
